@@ -4,8 +4,40 @@ from google import genai
 from google.genai import types
 
 st.set_page_config(page_title='TPOWI 2.0 | 냉장고를 부탁해',page_icon='🥑',layout='centered')
-st.markdown('''<style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');.stApp{background:#f8faf6;color:#203a33}.block-container{max-width:850px;padding-top:2rem}h1,h2,h3{color:#20483a!important}.hero{background:linear-gradient(115deg,#d7f2df,#fef5dc);border-radius:24px;padding:30px;margin-bottom:20px}.eyebrow{letter-spacing:3px;color:#648776;font-weight:700}.tag{display:inline-block;background:#e6f3e8;color:#31634c;border-radius:30px;padding:5px 12px;margin:3px;font-size:13px}.recipe{background:white;border:1px solid #e2ece4;border-radius:20px;padding:20px;margin:10px 0}.small{color:#617c70;font-size:14px}div.stButton>button[kind="primary"]{background:#2f7655;border-radius:12px;border:0}div.stButton>button{border-radius:12px}</style>''',unsafe_allow_html=True)
-st.caption('🥑 TPOWI 2.0  |  YOUR SMART FRIDGE')
+st.markdown("""<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
+html,body,[class*="css"],.stApp{font-family:'Nunito','Noto Sans KR',sans-serif}
+.stApp{background:radial-gradient(circle at 95% 5%,rgba(255,198,116,.29),transparent 34%),radial-gradient(circle at 4% 32%,rgba(148,221,183,.24),transparent 36%),linear-gradient(145deg,#fff9f0 0%,#fffdf8 52%,#f0fbf4 100%);color:#283e36}
+.block-container{max-width:780px!important;padding-top:2.3rem!important;padding-bottom:4rem!important}
+h1,h2,h3,h4{color:#24493b!important;letter-spacing:-.035em!important}
+h1{font-weight:900!important;font-size:clamp(2.3rem,5vw,3.5rem)!important;line-height:1.23!important}
+h2,h3{font-weight:800!important}
+[data-testid="stSidebar"]{background:linear-gradient(180deg,#fef6e8,#f2faf1)}
+[data-testid="stSidebar"]>div:first-child{border-right:1px solid #f2e5d3}
+[data-testid="stCaptionContainer"]{color:#73877d}
+[data-testid="stProgress"]>div>div>div{background:linear-gradient(90deg,#ff8d6a,#ffbc59,#6ac9a0)!important}
+.stButton>button{border-radius:15px!important;border:1px solid #e8ded0!important;background:#fffdf9!important;color:#365c4b!important;font-weight:800!important;min-height:48px;box-shadow:0 4px 12px rgba(74,72,44,.05);transition:transform .12s,box-shadow .12s}
+.stButton>button:hover{border-color:#ff9d79!important;box-shadow:0 7px 20px rgba(244,127,83,.14);transform:translateY(-1px)}
+.stButton>button[kind="primary"]{background:linear-gradient(105deg,#ff805e,#ffae67)!important;color:#fff!important;border:0!important;box-shadow:0 7px 18px rgba(255,128,94,.23)!important}
+[data-testid="stForm"]{background:rgba(255,255,255,.82);border:1px solid #f0e5d5;border-radius:26px;padding:24px;box-shadow:0 15px 35px rgba(111,88,53,.06)}
+[data-testid="stTextInput"] input,[data-testid="stNumberInput"] input{border-radius:12px!important}
+[data-testid="stAlert"]{border-radius:15px!important}
+.brandbar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.82);border:1px solid #f0e6d9;border-radius:18px;padding:13px 18px;margin-bottom:30px;box-shadow:0 5px 18px rgba(91,70,43,.04)}
+.brandname{font-size:17px;font-weight:900;letter-spacing:.03em;color:#2e604a}.brandpill{background:#e4f7eb;color:#378665;padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.07em}
+.progresslabel{display:inline-block;background:#ffe9d7;color:#bb6843;padding:9px 14px;border-radius:100px;font-size:12px;letter-spacing:1px;font-weight:900;margin-bottom:12px}
+.navcard{padding:24px 27px;border-radius:25px;background:rgba(255,255,255,.92);border:1px solid #efe7d9;margin:17px 0;box-shadow:0 13px 32px rgba(90,83,56,.065)}
+.steptext{font-size:18px;line-height:1.95;white-space:pre-wrap;color:#344b42}
+.photo-frame{background:#fff;border:1px solid #f0e7db;border-radius:24px;padding:12px;margin:12px auto 5px;max-width:480px;box-shadow:0 12px 28px rgba(72,70,49,.09)}
+.photo-frame img{border-radius:16px!important;object-fit:cover!important;max-height:285px!important;width:100%!important}
+.photo-caption{text-align:center;font-size:12px;color:#87958a;margin-top:8px}
+.hero-note{background:linear-gradient(105deg,#fff1d8,#ffe7dd);border:1px solid #ffe1c8;padding:18px 20px;border-radius:20px;color:#87563d;margin:12px 0 20px;font-weight:700}
+.recipe-step{background:linear-gradient(125deg,#ffffff,#fff8ef);border:1px solid #f3e6d7;border-radius:24px;padding:25px;margin:16px 0 20px;box-shadow:0 8px 25px rgba(100,75,49,.05)}
+.mini-label{font-size:12px;color:#f18b62;font-weight:900;letter-spacing:1.5px;margin-bottom:10px}
+.footer-note{font-size:12px;color:#87958a;text-align:center;padding:18px 0}
+@media(max-width:640px){.block-container{padding-top:1.3rem!important}.navcard{padding:18px}.brandbar{margin-bottom:20px}.photo-frame{max-width:100%}}
+</style>""",unsafe_allow_html=True)
+st.markdown('<div class="brandbar"><span class="brandname">🥑 TPOWI <span style="color:#f58a67">2.0</span></span><span class="brandpill">YOUR SMART FRIDGE</span></div>',unsafe_allow_html=True)
+
 
 if 'results' not in st.session_state: st.session_state.results=[]
 if 'excluded' not in st.session_state: st.session_state.excluded=[]
@@ -33,24 +65,41 @@ if 'selected_recipe' not in st.session_state: st.session_state.selected_recipe=0
 
 def go(page):
     st.session_state.page=page
+    st.session_state.scroll_to_top=True
     st.rerun()
+
+def reset_scroll_if_needed():
+    if st.session_state.pop('scroll_to_top', False):
+        # Streamlit 내부 스크롤 컨테이너와 브라우저 스크롤 모두 초기화.
+        # 배포 환경에서 iframe 접근이 제한되면 안전하게 무시합니다.
+        import streamlit.components.v1 as components
+        components.html("""<script>
+        try {
+          const doc = window.parent.document;
+          const nodes = [doc.querySelector('[data-testid="stAppViewContainer"]'),
+                         doc.querySelector('[data-testid="stMain"]'),
+                         doc.querySelector('section.main'), doc.scrollingElement];
+          nodes.forEach(el => {if(el){el.scrollTop=0;el.scrollTo?.({top:0,behavior:'instant'});}});
+          window.parent.scrollTo({top:0,behavior:'instant'});
+        } catch(e) { /* 브라우저 보안 정책상 접근 불가한 경우 */ }
+        </script>""",height=0)
 
 def step_nav(total):
     left,mid,right=st.columns([1,2,1])
     with left:
         if st.button('← 이전 단계',disabled=st.session_state.step_index<=0,use_container_width=True):
-            st.session_state.step_index-=1;st.rerun()
+            st.session_state.step_index-=1;st.session_state.scroll_to_top=True;st.rerun()
     with mid: st.markdown(f'<p style="text-align:center;font-weight:700">{st.session_state.step_index+1} / {total}</p>',unsafe_allow_html=True)
     with right:
         if st.button('다음 단계 →',disabled=st.session_state.step_index>=total-1,use_container_width=True):
-            st.session_state.step_index+=1;st.rerun()
+            st.session_state.step_index+=1;st.session_state.scroll_to_top=True;st.rerun()
 
-st.markdown('''<style>.block-container{max-width:760px}.navcard{padding:22px 24px;border-radius:20px;background:#fff;border:1px solid #e0ece2;margin:14px 0}.progresslabel{font-size:13px;color:#61836d;letter-spacing:1px;font-weight:800}.steptext{font-size:18px;line-height:1.9;white-space:pre-wrap}.pageintro{color:#627c6c}</style>''',unsafe_allow_html=True)
+reset_scroll_if_needed()
 
 if st.session_state.page=='setup':
     st.markdown('<div class="progresslabel">STEP 01 / 03 · 내 냉장고</div>',unsafe_allow_html=True)
     st.title('오늘은 뭘 먹을까요?')
-    st.caption('재료와 상황을 입력한 다음, 추천 메뉴를 한 장씩 넘겨보세요.')
+    st.markdown('<div class="hero-note">🍊 냉장고 속 재료가 오늘의 맛있는 한 끼가 되는 순간!<br>상황에 맞는 메뉴를 AI가 골라드려요.</div>',unsafe_allow_html=True)
     d=st.session_state.form_data
     with st.form('recipe_setup'):
         items=st.text_input('🧺 냉장고 속 재료 (쉼표로 구분)',value=d.get('items','달걀, 감자, 양파, 두부'))
@@ -76,6 +125,7 @@ if st.session_state.page=='setup':
             st.session_state.form_data=dict(items=items,when=when,place=place,minutes=minutes,occasion=occasion,weather=weather,servings=servings,likes=likes,dislikes=dislikes,allergies=allergies,other_allergy=other_allergy,notes=notes)
             st.session_state.excluded=[]
             st.session_state.page='loading'
+            st.session_state.scroll_to_top=True
             st.rerun()
 
 # 추천 생성과 상세 레시피 함수에서 사용하는 조건을 저장된 폼 데이터에서 복원
@@ -164,6 +214,7 @@ if st.session_state.page=='loading':
             st.session_state.results=create_recipes(st.session_state.excluded)
             st.session_state.recipe_index=0
             st.session_state.page='recommendations'
+            st.session_state.scroll_to_top=True
             st.rerun()
         except Exception as e:
             st.error(f'메뉴 추천에 실패했어요: {e}')
@@ -176,7 +227,7 @@ if st.session_state.page=='recommendations':
     r=recipes[idx]
     st.markdown('<div class="progresslabel">STEP 02 / 03 · 오늘의 추천 메뉴</div>',unsafe_allow_html=True)
     st.title('이 메뉴는 어때요?')
-    st.caption(f'추천 메뉴 {idx+1} / {len(recipes)} · 마음에 드는 메뉴를 골라보세요')
+    st.markdown(f'<div class="hero-note">✨ 추천 메뉴 {idx+1} / {len(recipes)} · 마음에 드는 메뉴를 골라보세요</div>',unsafe_allow_html=True)
     st.markdown('<div class="navcard">',unsafe_allow_html=True)
     st.markdown(f'## {r.get("emoji","🍽️")} {r.get("name","추천 메뉴")}')
     st.write(r.get('description',''))
@@ -189,10 +240,10 @@ if st.session_state.page=='recommendations':
     c1,c2=st.columns(2)
     with c1:
         if st.button('← 이전 메뉴',disabled=idx==0,use_container_width=True):
-            st.session_state.recipe_index-=1;st.rerun()
+            st.session_state.recipe_index-=1;st.session_state.scroll_to_top=True;st.rerun()
     with c2:
         if st.button('다음 메뉴 →',disabled=idx>=len(recipes)-1,use_container_width=True):
-            st.session_state.recipe_index+=1;st.rerun()
+            st.session_state.recipe_index+=1;st.session_state.scroll_to_top=True;st.rerun()
     if st.button('🍳 이 메뉴의 레시피 자세히 보기',type='primary',use_container_width=True):
         st.session_state.selected_recipe=idx
         st.session_state.step_index=0
@@ -228,12 +279,15 @@ if st.session_state.page=='detail':
     st.markdown('<div class="progresslabel">STEP 03 / 03 · 한 장씩 따라 하는 레시피</div>',unsafe_allow_html=True)
     st.title(r.get('name','상세 레시피'))
     st.progress((i+1)/len(pages))
+    st.caption(f'📖 레시피 카드 {i+1} / {len(pages)} · 아래 버튼으로 다음 장을 넘겨보세요')
     if kind=='intro':
         st.markdown('### 🍽️ 완성 요리')
         photo=find_food_photo(detail.get('photo_search_term') or r.get('name',''))
         if photo and photo.get('url'):
-            st.image(photo['url'],use_container_width=True)
-            st.caption('Wikimedia Commons 참고 사진 · 실제 레시피와 다를 수 있음')
+            st.markdown('<div class="photo-frame">',unsafe_allow_html=True)
+            st.image(photo['url'],width=430)
+            st.markdown('</div>',unsafe_allow_html=True)
+            st.caption('📷 Wikimedia Commons 참고 사진 · 실제 레시피와 다를 수 있음')
             if photo.get('page'):st.caption('사진 출처: '+photo['page'])
         else: st.info('현재 참고 사진을 찾지 못했어요. 조리법은 정상적으로 볼 수 있어요.')
         st.markdown('<div class="navcard">',unsafe_allow_html=True)
@@ -256,7 +310,7 @@ if st.session_state.page=='detail':
         current_step=i-2
         st.markdown(f'### 🍳 조리 {current_step}단계 / {len(steps)}')
         st.markdown(f'#### {content.get("title","조리하기")}')
-        st.markdown('<div class="navcard"><div class="steptext">'+str(content.get('instruction','')).replace('<','&lt;').replace('>','&gt;')+'</div></div>',unsafe_allow_html=True)
+        st.markdown('<div class="recipe-step"><div class="mini-label">COOKING GUIDE</div><div class="steptext">'+str(content.get('instruction','')).replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')+'</div></div>',unsafe_allow_html=True)
         if content.get('minutes'):st.info(f'⏱ 예상 소요 시간: {content["minutes"]}분')
     else:
         st.markdown('### 🎉 요리 완성!')
@@ -277,3 +331,5 @@ if st.session_state.saved:
     with st.sidebar.expander(f'💚 저장한 메뉴 ({len(st.session_state.saved)})'):
         for r in st.session_state.saved:st.write('• '+r.get('name',''))
         st.download_button('JSON 내보내기',json.dumps(st.session_state.saved,ensure_ascii=False,indent=2),file_name='tpowi_recipes.json',mime='application/json')
+
+st.markdown('<div class="footer-note">MADE WITH 🧡 · TPOWI 2.0 · PERSONALIZED RECIPE EXPERIENCE</div>',unsafe_allow_html=True)
